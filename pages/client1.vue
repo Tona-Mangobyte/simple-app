@@ -40,6 +40,12 @@ export default {
     socket.on('disconnect', () => {
       console.log(socket.id) // undefined
     })
+    socket.on('connect_error', (err) => {
+      console.log(err)
+    })
+    socket.on('error', (err) => {
+      console.log(err)
+    })
   },
 }
 </script>

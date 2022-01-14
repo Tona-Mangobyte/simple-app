@@ -61,6 +61,12 @@ export default class extends Vue {
     this.socket.on('disconnect', () => {
       console.log('The client is disconnect')
     })
+    this.socket.on('connect_error', (err) => {
+      console.log(err)
+    })
+    this.socket.on('error', (err) => {
+      console.log(err)
+    })
   }
 
   start() {
