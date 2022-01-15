@@ -11,6 +11,7 @@
           <v-btn color="primary" @click="cancel"> March Cancel </v-btn>
           <v-btn color="primary" @click="join"> March Join </v-btn>
           <v-btn color="primary" @click="joinCancel"> March Join Cancel </v-btn>
+          <v-btn color="primary" @click="bluffRates"> Bluff Rates </v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -28,6 +29,7 @@ export default class extends Vue {
   MATCH_CANCEL = '2'
   MATCH_JOIN = '4'
   MATCH_JOIN_CANCEL = '3'
+  BLUFF_RATE = '5'
 
   // SOCKET LISTEN EVENT
   CONNECTION = 'connect'
@@ -38,6 +40,7 @@ export default class extends Vue {
   MATCH_JOINED = '2'
   MATCH_JOIN_CANCELLED = '3'
   MATCH_CANCELLED = '5'
+  BLUFF_RATES = '6'
 
   // SOCKET LISTEN ERROR
   CONNECTION_ERROR = 'connect_error'
@@ -84,6 +87,10 @@ export default class extends Vue {
       console.log('matches cancelled')
       console.log(data)
     })
+    this.socket.on(this.BLUFF_RATES, (data: any) => {
+      console.log('bluff Rates')
+      console.log(data)
+    })
     this.socket.on(this.DISCONNECT, () => {
       console.log('The client is disconnect')
     })
@@ -124,6 +131,15 @@ export default class extends Vue {
       eventId: 'abbdc8b6-d85e-425c-997e-9ffbfbb454c9',
       matchId: 6,
       userId: 1,
+    })
+  }
+
+  bluffRates() {
+    console.log('bluff Rates...')
+    this.socket.emit(this.BLUFF_RATE, {
+      page: 1, // optional
+      limit: 10, // optional
+      eventId: 1, // Required
     })
   }
 }
