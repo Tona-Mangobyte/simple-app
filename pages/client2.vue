@@ -1,58 +1,144 @@
 <template>
   <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
+    <v-col cols="12" sm="8" md="8">
       <v-card>
         <v-card-title class="headline"> Welcome to Minority Game </v-card-title>
         <v-card-text>
-          <p>Welcome client 2</p>
+          <p>Some handlers in matches</p>
         </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" @click="start"> March Start </v-btn>
+          <v-btn color="primary" @click="cancel"> March Cancel </v-btn>
+          <v-btn color="primary" @click="join"> March Join </v-btn>
+          <v-btn color="primary" @click="joinCancel"> March Join Cancel </v-btn>
+          <v-btn color="primary" @click="bluffRates"> Bluff Rates </v-btn>
+        </v-card-actions>
       </v-card>
     </v-col>
   </v-row>
 </template>
-<script>
-import { io } from 'socket.io-client'
-export default {
+<script lang="ts">
+import { Component, Vue } from 'nuxt-property-decorator'
+import { io, Socket } from 'socket.io-client'
+
+@Component
+export default class extends Vue {
+  // SOCKET REQUEST EVENT
+  MATCH_START = '1'
+  MATCH_CANCEL = '2'
+  MATCH_JOIN = '4'
+  MATCH_JOIN_CANCEL = '3'
+  BLUFF_RATE = '5'
+
+  // SOCKET LISTEN EVENT
+  CONNECTION = 'connect'
+  DISCONNECT = 'disconnect'
+  USER_CONNECTED = '0'
+  WAITING_USERS_LIST = '13'
+  MATCH_STARTED = '4'
+  MATCH_JOINED = '2'
+  MATCH_JOIN_CANCELLED = '3'
+  MATCH_CANCELLED = '5'
+  BLUFF_RATES = '6'
+
+  // SOCKET LISTEN ERROR
+  CONNECTION_ERROR = 'connect_error'
+  GENERAL_ERROR = 'error'
+
+  socket!: Socket
   mounted() {
     console.log('================Mount================')
-    const socket = io('http://localhost:9000', {
+    this.socket = io('http://localhost:9000', {
       path: '/minority.game/',
       auth: {
         token:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyand0IjoiMTpmZTJlMTBjMC03NDQ1LTExZWMtOTI0Ni1iNWFmNWM1YjdmMTkiLCJkYXRhVG9rZW4iOnsiaWQiOjEsInBsYXRmb3JtVUlEIjoiMiJ9LCJpYXQiOjE2NDIwNjA0NTAsImV4cCI6MTY0MjE0Njg1MH0.Et7rpfV-MSwaFCC1PHSYcWWgBKNVIGcYyskDeFLVCqY',
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyand0IjoiODo1ZDMxODcwMC03OTBmLTExZWMtYTNlYS1hMzhlY2U5ODEyNzAiLCJkYXRhVG9rZW4iOnsiaWQiOjgsInBsYXRmb3JtVUlEIjoiYTFjN2MxMmMtOTJhZS00ZDZjLThlMDMtOTU2YTBlYTk4ZDFjIn0sImlhdCI6MTY0MjU4Njc0MywiZXhwIjoxNjQyNjczMTQzfQ.yobnA5QIDxfZf1aEt1FnTz0xjzzL8zL2QC1DxDTxWSA',
       },
     })
     // client-side
-
-    // eslint-disable-next-line require-await
-    socket.on('connect', async () => {
-      // const engine = socket.io.engine.
-      if (socket.connected) {
-        console.log('The client has connected')
-        console.log(socket)
-        console.log(socket.id)
-        socket.on(socket.id, (data) => {
-          console.log('listen user re')
-          console.log(data)
-        })
+    this.socket.on(this.CONNECTION, () => {
+      if (this.socket.connected) {
+        console.log('The client is connected')
       }
     })
-    socket.on('0', (data) => {
+    this.socket.on(this.USER_CONNECTED, (data: any) => {
+      console.log('listen user connection')
       console.log(data)
     })
-    socket.on('13', (data) => {
+    this.socket.on(this.WAITING_USERS_LIST, (data: any) => {
       console.log('waiting users list')
       console.log(data)
     })
-    socket.on('disconnect', () => {
-      console.log(socket.id) // undefined
+    this.socket.on(this.MATCH_JOINED, (data: any) => {
+      console.log('matches joined')
+      console.log(data)
     })
-    socket.on('connect_error', (err) => {
+    this.socket.on(this.MATCH_JOIN_CANCELLED, (data: any) => {
+      console.log('matches join cancelled')
+      console.log(data)
+    })
+    this.socket.on(this.MATCH_STARTED, (data: any) => {
+      console.log('matches started')
+      console.log(data)
+    })
+    this.socket.on(this.MATCH_CANCELLED, (data: any) => {
+      console.log('matches cancelled')
+      console.log(data)
+    })
+    this.socket.on(this.BLUFF_RATES, (data: any) => {
+      console.log('bluff Rates')
+      console.log(data)
+    })
+    this.socket.on(this.DISCONNECT, () => {
+      console.log('The client is disconnect')
+    })
+    this.socket.on(this.CONNECTION_ERROR, (err) => {
       console.log(err)
     })
-    socket.on('error', (err) => {
+    this.socket.on(this.GENERAL_ERROR, (err) => {
       console.log(err)
     })
-  },
+  }
+
+  start() {
+    console.log('matches starting...')
+    this.socket.emit(this.MATCH_START, {
+      eventId: 'abbdc8b6-d85e-425c-997e-9ffbfbb454c9',
+    })
+  }
+
+  cancel() {
+    console.log('matches cancel...')
+    this.socket.emit(this.MATCH_CANCEL, {
+      eventId: 'abbdc8b6-d85e-425c-997e-9ffbfbb454c9',
+      userId: 1,
+    })
+  }
+
+  join() {
+    console.log('matches join...')
+    this.socket.emit(this.MATCH_JOIN, {
+      eventId: '5e52ec44-0c6a-4a73-9f87-d1e8df66b91e',
+      matchId: 13,
+    })
+  }
+
+  joinCancel() {
+    console.log('matches join cancel...')
+    this.socket.emit(this.MATCH_JOIN_CANCEL, {
+      eventId: 'abbdc8b6-d85e-425c-997e-9ffbfbb454c9',
+      matchId: 6,
+      userId: 1,
+    })
+  }
+
+  bluffRates() {
+    console.log('bluff Rates...')
+    this.socket.emit(this.BLUFF_RATE, {
+      page: 1, // optional
+      limit: 10, // optional
+      eventId: 1, // Required
+    })
+  }
 }
 </script>

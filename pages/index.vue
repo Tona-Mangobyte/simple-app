@@ -120,8 +120,8 @@ export default class extends Vue {
   join() {
     console.log('matches join...')
     this.socket.emit(this.MATCH_JOIN, {
-      eventId: 'abbdc8b6-d85e-425c-997e-9ffbfbb454c9',
-      matchId: 6,
+      eventId: '5e52ec44-0c6a-4a73-9f87-d1e8df66b91e',
+      matchId: 13,
     })
   }
 
