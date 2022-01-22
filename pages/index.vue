@@ -52,6 +52,7 @@ export default class extends Vue {
     console.log('====mounted========')
     this.socket = io('http://localhost:9000', {
       path: '/minority.game/',
+      transports: ['websocket'],
       auth: {
         token:
           'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyand0IjoiMTpkYjdkNTU3MC03NWI0LTExZWMtOTg2NC0zZjVlMzFjYTZkNTkiLCJkYXRhVG9rZW4iOnsiaWQiOjEsInBsYXRmb3JtVUlEIjoiMiJ9LCJpYXQiOjE2NDIyMTgwMTcsImV4cCI6MTY0MjMwNDQxN30.U5YAImBSvkyLC7CT-Z1V6A9zGgIkIpyEa8DMABLRMsw',
@@ -121,7 +122,7 @@ export default class extends Vue {
     console.log('matches join...')
     this.socket.emit(this.MATCH_JOIN, {
       eventId: '5e52ec44-0c6a-4a73-9f87-d1e8df66b91e',
-      matchId: 13,
+      // matchId: 13,
     })
   }
 
