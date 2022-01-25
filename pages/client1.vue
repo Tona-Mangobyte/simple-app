@@ -1,51 +1,56 @@
 <template>
   <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
+    <v-col cols="12">
       <v-card>
-        <v-card-title class="headline"> Welcome to Minority Game </v-card-title>
+        <v-card-title class="headline">
+          Welcome to Minority Game | Counter {{ counter }}
+        </v-card-title>
         <v-card-text>
-          <p>Welcome client 1</p>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title v-for="user in users" :key="user.id">
+                {{ user.username }}</v-list-item-title
+              >
+            </v-list-item-content>
+          </v-list-item>
+          <v-form ref="form" lazy-validation>
+            <v-text-field v-model="eventId" label="Event Id"></v-text-field>
+            <v-text-field
+              v-model.number="matchId"
+              label="Match Id"
+            ></v-text-field>
+            <v-text-field
+              v-model.number="duration"
+              label="Duration"
+            ></v-text-field>
+          </v-form>
         </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" @click="start"> March Start </v-btn>
+          <v-btn color="primary" @click="cancel"> March Cancel </v-btn>
+          <v-btn color="primary" @click="join"> March Join </v-btn>
+          <v-btn color="primary" @click="joinCancel"> March Join Cancel </v-btn>
+          <v-btn color="primary" @click="bluffRates"> Bluff Rates </v-btn>
+          <v-btn color="primary" @click="getDuration"> Duration </v-btn>
+        </v-card-actions>
       </v-card>
     </v-col>
   </v-row>
 </template>
-<script>
-import { io } from 'socket.io-client'
-export default {
+<script lang="ts">
+import { Component, mixins } from 'nuxt-property-decorator'
+import ws from '~/mixins/ws'
+
+@Component
+export default class extends mixins(ws) {
+  // Tona MB
+  userId = 8
+  accessToken =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyand0IjoiODo5YjNhMDUwMC03ZDk2LTExZWMtYTg0My04N2QwMjM0ZWQ4YTYiLCJkYXRhVG9rZW4iOnsiaWQiOjgsInBsYXRmb3JtVUlEIjoiYTFjN2MxMmMtOTJhZS00ZDZjLThlMDMtOTU2YTBlYTk4ZDFjIn0sImlhdCI6MTY0MzA4NDYzNCwiZXhwIjoxNjQzMTcxMDM0fQ.S77hV-4dTNBS6CQDb9SNmYt8grUwfZLbo5V0GfC4z_c'
+
   mounted() {
-    console.log('================Mount================')
-    const socket = io('http://localhost:9000', {
-      path: '/minority.game/',
-      auth: {
-        token:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyand0IjoiMjoxMDUwOGQ1MC03NDQ2LTExZWMtOTI0Ni1iNWFmNWM1YjdmMTkiLCJkYXRhVG9rZW4iOnsiaWQiOjIsInBsYXRmb3JtVUlEIjoiMSJ9LCJpYXQiOjE2NDIwNjA0ODEsImV4cCI6MTY0MjE0Njg4MX0.cZ5HvF_VToSLh75aQLSsuVECa4qij2NeXVh_jFCd8Vo',
-      },
-    })
-    // client-side
-    socket.on('connect', () => {
-      if (socket.connected) {
-        console.log('The client has connected')
-      }
-      console.log(socket.id)
-    })
-    socket.on('0', (data) => {
-      console.log('listen user connection')
-      console.log(data)
-    })
-    socket.on('13', (data) => {
-      console.log('waiting users list')
-      console.log(data)
-    })
-    socket.on('disconnect', () => {
-      console.log(socket.id) // undefined
-    })
-    socket.on('connect_error', (err) => {
-      console.log(err)
-    })
-    socket.on('error', (err) => {
-      console.log(err)
-    })
-  },
+    this.connectSocket()
+    this.getAllListenEventOnSocket()
+  }
 }
 </script>
