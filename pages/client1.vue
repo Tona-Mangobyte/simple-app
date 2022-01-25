@@ -9,7 +9,7 @@
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title v-for="user in users" :key="user.id">
-                {{ user.username }}</v-list-item-title
+                {{ user.gameUsername }}</v-list-item-title
               >
             </v-list-item-content>
           </v-list-item>
