@@ -31,7 +31,7 @@
           <v-btn color="primary" @click="join"> March Join </v-btn>
           <v-btn color="primary" @click="joinCancel"> March Join Cancel </v-btn>
           <v-btn color="primary" @click="bluffRates"> Bluff Rates </v-btn>
-          <v-btn color="primary" @click="getQuick"> Quick </v-btn>
+          <v-btn color="primary" @click="getQuick"> Start Quick </v-btn>
           <v-btn color="primary" @click="addUserToRoom">
             Add User(Join Already)
           </v-btn>
