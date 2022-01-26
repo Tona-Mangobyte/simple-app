@@ -31,9 +31,32 @@
           <v-btn color="primary" @click="join"> March Join </v-btn>
           <v-btn color="primary" @click="joinCancel"> March Join Cancel </v-btn>
           <v-btn color="primary" @click="bluffRates"> Bluff Rates </v-btn>
-          <v-btn color="primary" @click="getDuration"> Duration </v-btn>
+          <v-btn color="primary" @click="getQuick"> Quick </v-btn>
+          <v-btn color="primary" @click="addUserToRoom">
+            Add User(Join Already)
+          </v-btn>
+          <v-btn color="primary" @click="leaveUserFromRoom"> Leave User </v-btn>
         </v-card-actions>
       </v-card>
+    </v-col>
+    <v-col>
+      <v-row>
+        <v-col v-for="(q, index) in quick.items" :key="index">
+          <v-card class="mx-auto" max-width="344">
+            <v-img
+              v-if="quick.type === 'IMAGE'"
+              :src="
+                q.imageUrl ||
+                'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg'
+              "
+              height="200px"
+            ></v-img>
+            <v-card-title>
+              <p class="text-h4 text--primary">{{ q.title }}</p>
+            </v-card-title>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-col>
   </v-row>
 </template>
@@ -44,9 +67,9 @@ import ws from '~/mixins/ws'
 @Component
 export default class extends mixins(ws) {
   // Mango one
-  userId = 1
+  userId = 2
   accessToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyand0IjoiMTo2ZmQ4ODUzMC03ZDk2LTExZWMtYTg0My04N2QwMjM0ZWQ4YTYiLCJkYXRhVG9rZW4iOnsiaWQiOjEsInBsYXRmb3JtVUlEIjoiMiJ9LCJpYXQiOjE2NDMwODQ1NjEsImV4cCI6MTY0MzE3MDk2MX0.0L0-AuXsp1oYzITdpV9Lq_p66ittHmjShqMHpzLGKNE'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyand0IjoiMjo2MWRmNGRiMC03ZDliLTExZWMtOWY0OC1iM2ExYzM2MTUyZTIiLCJkYXRhVG9rZW4iOnsiaWQiOjIsInBsYXRmb3JtVUlEIjoiMiJ9LCJpYXQiOjE2NDMwODY2ODUsImV4cCI6MTY0MzE3MzA4NX0.siA80BEvgEFLVMgnx6dnPuCS-8gkTn-qaRaFWNkMf_8'
 
   mounted() {
     this.connectSocket()

@@ -8,7 +8,7 @@
         <v-card-text>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title v-for="user in users" :key="user.id">
+              <v-list-item-title v-for="(user, index) in users" :key="index">
                 {{ user.gameUsername }}</v-list-item-title
               >
             </v-list-item-content>
@@ -31,9 +31,32 @@
           <v-btn color="primary" @click="join"> March Join </v-btn>
           <v-btn color="primary" @click="joinCancel"> March Join Cancel </v-btn>
           <v-btn color="primary" @click="bluffRates"> Bluff Rates </v-btn>
-          <v-btn color="primary" @click="getDuration"> Duration </v-btn>
+          <v-btn color="primary" @click="getQuick"> Quick </v-btn>
+          <v-btn color="primary" @click="addUserToRoom">
+            Add User(Join Already)
+          </v-btn>
+          <v-btn color="primary" @click="leaveUserFromRoom"> Leave User </v-btn>
         </v-card-actions>
       </v-card>
+    </v-col>
+    <v-col>
+      <v-row>
+        <v-col v-for="(q, index) in quick.items" :key="index">
+          <v-card class="mx-auto" max-width="344">
+            <v-img
+              v-if="quick.type === 'IMAGE'"
+              :src="
+                q.imageUrl ||
+                'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg'
+              "
+              height="200px"
+            ></v-img>
+            <v-card-title>
+              <p class="text-h4 text--primary">{{ q.title }}</p>
+            </v-card-title>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-col>
   </v-row>
 </template>
@@ -45,9 +68,9 @@ import ws from '~/mixins/ws'
 @Component
 export default class extends mixins(ws) {
   // Mango one Admin
-  userId = 2
+  userId = 3
   accessToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyand0IjoiMjo4YThhMDQzMC03ZDk2LTExZWMtYTg0My04N2QwMjM0ZWQ4YTYiLCJkYXRhVG9rZW4iOnsiaWQiOjIsInBsYXRmb3JtVUlEIjoiMSJ9LCJpYXQiOjE2NDMwODQ2MDYsImV4cCI6MTY0MzE3MTAwNn0.wQmIKBQPE_9b4oE6PX33e3wU7rwJzL8avJxnUFbpW8Q'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyand0IjoiMzozMDQ3MTM1MC03ZDliLTExZWMtOWY0OC1iM2ExYzM2MTUyZTIiLCJkYXRhVG9rZW4iOnsiaWQiOjMsInBsYXRmb3JtVUlEIjoiMSJ9LCJpYXQiOjE2NDMwODY2MDIsImV4cCI6MTY0MzE3MzAwMn0.imW-Gsvb2hOouB0SYNJb8rr2G552i994mD9R1E-yHJc'
 
   mounted() {
     this.connectSocket()

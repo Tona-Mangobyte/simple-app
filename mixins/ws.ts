@@ -9,7 +9,9 @@ export default class extends Vue {
   MATCH_JOIN = '4'
   MATCH_JOIN_CANCEL = '3'
   BLUFF_RATE = '5'
-  DURATION_MATCH_ROOM = '8'
+  JOIN_MATCH_ROOM = '6'
+  LEAVE_MATCH_ROOM = '7'
+  QUICK_MATCH_ROOM = '9'
 
   // SOCKET LISTEN EVENT
   CONNECTION = 'connect'
@@ -22,6 +24,7 @@ export default class extends Vue {
   MATCH_CANCELLED = '5'
   BLUFF_RATES = '6'
   LISTEN_DURATION_MATCH_ROOM = '15'
+  STARTED_QUICK_IN_MATCH_ROOM = '16'
 
   // SOCKET LISTEN ERROR
   CONNECTION_ERROR = 'connect_error'
@@ -36,6 +39,7 @@ export default class extends Vue {
   // duration time counter
   duration = 30
   counter = 0
+  quick = { type: 'TEXT', items: [] }
 
   // users in waiting room
   users = []
@@ -94,6 +98,11 @@ export default class extends Vue {
     })
     this.socket.on(this.LISTEN_DURATION_MATCH_ROOM, (resp: any) => {
       this.counter = resp.data.duration
+    })
+    this.socket.on(this.STARTED_QUICK_IN_MATCH_ROOM, (resp: any) => {
+      console.log('the quick started')
+      console.log(resp)
+      this.quick = resp.data.quick
     })
     this.socket.on(this.DISCONNECT, () => {
       console.log('The client is disconnect')
@@ -154,11 +163,24 @@ export default class extends Vue {
     })
   }
 
-  getDuration() {
-    console.log('start duration choose match...')
-    this.socket.emit(this.DURATION_MATCH_ROOM, {
+  getQuick() {
+    console.log('start quick choose match...')
+    this.socket.emit(this.QUICK_MATCH_ROOM, {
       eventId: this.eventId, // Required
       duration: this.duration, // sec
+      round: 1,
+    })
+  }
+
+  addUserToRoom() {
+    this.socket.emit(this.JOIN_MATCH_ROOM, {
+      eventId: this.eventId, // Required
+    })
+  }
+
+  leaveUserFromRoom() {
+    this.socket.emit(this.LEAVE_MATCH_ROOM, {
+      eventId: this.eventId, // Required
     })
   }
 }
