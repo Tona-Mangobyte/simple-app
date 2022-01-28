@@ -5,6 +5,11 @@ export default {
     port: process.env.PORT || 3050, // default: 3050
     host: process.env.HOST || 'localhost', // default: localhost
   },
+  publicRuntimeConfig: {
+    tokenClient: process.env.ACCESS_TOKEN_CLIENT,
+    tokenClient1: process.env.ACCESS_TOKEN_CLIENT1,
+    tokenClient2: process.env.ACCESS_TOKEN_CLIENT2,
+  },
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 

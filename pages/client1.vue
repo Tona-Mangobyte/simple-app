@@ -68,8 +68,10 @@ import ws from '~/mixins/ws'
 export default class extends mixins(ws) {
   // Tona MB
   userId = 1
-  accessToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyand0IjoiMTo2ZmFlMDA4MC03ZDliLTExZWMtOWY0OC1iM2ExYzM2MTUyZTIiLCJkYXRhVG9rZW4iOnsiaWQiOjEsInBsYXRmb3JtVUlEIjoiYTFjN2MxMmMtOTJhZS00ZDZjLThlMDMtOTU2YTBlYTk4ZDFjIn0sImlhdCI6MTY0MzA4NjcwOCwiZXhwIjoxNjQzMTczMTA4fQ.apxcLW16bQzjIIL_laxc5eiDARAkLb7ydEThlSEtGes'
+
+  get accessToken() {
+    return this.$config.tokenClient1
+  }
 
   mounted() {
     this.connectSocket()

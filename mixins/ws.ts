@@ -34,7 +34,9 @@ export default class extends Vue {
   isConnect = false
 
   // Token Access API
-  accessToken = ''
+  get accessToken() {
+    throw new Error('access token api is required')
+  }
 
   // duration time counter
   duration = 30

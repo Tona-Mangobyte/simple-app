@@ -69,8 +69,10 @@ import ws from '~/mixins/ws'
 export default class extends mixins(ws) {
   // Mango one Admin
   userId = 3
-  accessToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyand0IjoiMzozMDQ3MTM1MC03ZDliLTExZWMtOWY0OC1iM2ExYzM2MTUyZTIiLCJkYXRhVG9rZW4iOnsiaWQiOjMsInBsYXRmb3JtVUlEIjoiMSJ9LCJpYXQiOjE2NDMwODY2MDIsImV4cCI6MTY0MzE3MzAwMn0.imW-Gsvb2hOouB0SYNJb8rr2G552i994mD9R1E-yHJc'
+
+  get accessToken() {
+    return this.$config.tokenClient
+  }
 
   mounted() {
     this.connectSocket()
