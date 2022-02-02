@@ -143,7 +143,7 @@ export default class extends Vue {
     console.log('matches join...')
     this.socket.emit(this.MATCH_JOIN, {
       eventId: this.eventId,
-      matchId: this.matchId,
+      userId: this.userId,
     })
   }
 

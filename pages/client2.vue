@@ -16,7 +16,7 @@
           <v-form ref="form" lazy-validation>
             <v-text-field v-model="eventId" label="Event Id"></v-text-field>
             <v-text-field
-              v-model.number="matchId"
+              v-model.number="userId"
               label="Match Id"
             ></v-text-field>
             <v-text-field
