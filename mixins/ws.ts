@@ -11,6 +11,7 @@ export default class extends Vue {
   BLUFF_RATE = '5'
   JOIN_MATCH_ROOM = '6'
   LEAVE_MATCH_ROOM = '7'
+  DURATION_MATCH_ROOM = '8'
   QUICK_MATCH_ROOM = '9'
 
   // SOCKET LISTEN EVENT
@@ -126,34 +127,26 @@ export default class extends Vue {
 
   start() {
     console.log('matches starting...')
-    this.socket.emit(this.MATCH_START, {
-      eventId: this.eventId,
-    })
+    const data = `{ "eventId": "${this.eventId}" }`
+    this.socket.emit(this.MATCH_START, data)
   }
 
   cancel() {
     console.log('matches cancel...')
-    this.socket.emit(this.MATCH_CANCEL, {
-      eventId: this.eventId,
-      userId: this.userId,
-    })
+    const data = `{ "eventId": "${this.eventId}", "userId": ${this.userId} }`
+    this.socket.emit(this.MATCH_CANCEL, data)
   }
 
   join() {
     console.log('matches join...')
-    this.socket.emit(this.MATCH_JOIN, {
-      eventId: this.eventId,
-      userId: this.userId,
-    })
+    const data = `{ "eventId": "${this.eventId}", "userId": ${this.userId} }`
+    this.socket.emit(this.MATCH_JOIN, data)
   }
 
   joinCancel() {
     console.log('matches join cancel...')
-    this.socket.emit(this.MATCH_JOIN_CANCEL, {
-      eventId: this.eventId,
-      matchId: this.matchId,
-      userId: this.userId,
-    })
+    const data = `{ "eventId": "${this.eventId}", "matchId": "${this.matchId}", "userId": ${this.userId} }`
+    this.socket.emit(this.MATCH_JOIN_CANCEL, data)
   }
 
   bluffRates() {
@@ -165,24 +158,19 @@ export default class extends Vue {
     })
   }
 
-  getQuick() {
-    console.log('start quick choose match...')
-    this.socket.emit(this.QUICK_MATCH_ROOM, {
-      eventId: this.eventId, // Required
-      duration: this.duration, // sec
-      round: 1,
-    })
+  getDuration() {
+    console.log('start duration match...')
+    const data = `{ "eventId": "${this.eventId}", "duration": ${this.duration} }`
+    this.socket.emit(this.DURATION_MATCH_ROOM, data)
   }
 
   addUserToRoom() {
-    this.socket.emit(this.JOIN_MATCH_ROOM, {
-      eventId: this.eventId, // Required
-    })
+    const data = `{ "eventId": "${this.eventId}" }`
+    this.socket.emit(this.JOIN_MATCH_ROOM, data)
   }
 
   leaveUserFromRoom() {
-    this.socket.emit(this.LEAVE_MATCH_ROOM, {
-      eventId: this.eventId, // Required
-    })
+    const data = `{ "eventId": "${this.eventId}" }`
+    this.socket.emit(this.LEAVE_MATCH_ROOM, data)
   }
 }

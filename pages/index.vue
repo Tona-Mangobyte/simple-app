@@ -17,7 +17,7 @@
             <v-text-field v-model="eventId" label="Event Id"></v-text-field>
             <v-text-field
               v-model.number="userId"
-              label="Match Id"
+              label="User Id"
             ></v-text-field>
             <v-text-field
               v-model.number="duration"
@@ -31,7 +31,7 @@
           <v-btn color="primary" @click="join"> March Join </v-btn>
           <v-btn color="primary" @click="joinCancel"> March Join Cancel </v-btn>
           <v-btn color="primary" @click="bluffRates"> Bluff Rates </v-btn>
-          <v-btn color="primary" @click="getQuick"> Start Quick </v-btn>
+          <v-btn color="primary" @click="getDuration"> Duration </v-btn>
           <v-btn color="primary" @click="addUserToRoom">
             Add User(Join Already)
           </v-btn>
@@ -68,7 +68,7 @@ import ws from '~/mixins/ws'
 @Component
 export default class extends mixins(ws) {
   // Mango one Admin
-  userId = 3
+  userId = 2
 
   get accessToken() {
     return this.$config.tokenClient
