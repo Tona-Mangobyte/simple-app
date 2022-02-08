@@ -9,6 +9,10 @@ export default {
     tokenClient: process.env.ACCESS_TOKEN_CLIENT,
     tokenClient1: process.env.ACCESS_TOKEN_CLIENT1,
     tokenClient2: process.env.ACCESS_TOKEN_CLIENT2,
+    axios: {
+      baseURL: process.env.API_URL,
+    },
+    apiKey: process.env.API_KEY,
   },
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
