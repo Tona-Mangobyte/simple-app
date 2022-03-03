@@ -50,7 +50,7 @@ export default class extends Vue {
   connectSocket() {
     this.socket = io('http://localhost:9000', {
       path: '/minority.game/',
-      transports: ['websocket'],
+      transports: ['polling'],
       auth: {
         token: `Bearer ${this.accessToken}`,
       },
@@ -151,11 +151,14 @@ export default class extends Vue {
 
   bluffRates() {
     console.log('bluff Rates...')
-    this.socket.emit(this.BLUFF_RATE, {
-      page: 1, // optional
-      limit: 10, // optional
-      eventId: this.eventId, // Required
-    })
+    const eventId = 17
+    this.userId = 1
+    const itemId = 94
+    const round = 1
+    const isBluff = true
+    const data = `{ "eventId": ${eventId}, "itemId": ${itemId}, "userId": ${this.userId}, "round": ${round}, "isBluff": ${isBluff} }`
+    const result = this.socket.emit(this.BLUFF_RATE, data)
+    console.info(result)
   }
 
   getDuration() {
