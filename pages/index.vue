@@ -26,9 +26,9 @@
           </v-form>
           <v-radio-group v-model="itemId">
             <v-radio
-              v-for="n in itemList.items"
+              v-for="n in itemList"
               :key="n.id"
-              :label="`${n.title}(${percentage})`"
+              :label="`${n.title}(${n.percentage})`"
               :value="n.id"
             ></v-radio>
           </v-radio-group>
@@ -61,9 +61,8 @@ export default class extends mixins(ws) {
   IS_USERID = true
   userId = 2
   eventId = '1'
-  itemList = {
-    items: [],
-  }
+  itemId = 0
+  itemList = []
 
   get accessToken() {
     // return this.$config.tokenClient
@@ -77,16 +76,21 @@ export default class extends mixins(ws) {
     const { data } = await this.$axios.get('freeSelectItemList', {
       headers: { 'x-api-key': apiKey, accept: 'application/json;api.v=1' },
     })
-    const { round } = data.data
+    const { round, items } = data.data
     this.round = round
-    this.itemList = data.data
+    this.itemList = items.map((item: any) => {
+      item.percentage = '0%'
+      return item
+    })
     console.info(this.itemList)
     console.info(this.round)
     this.socket.on(this.BLUFF_RATES, (data: any) => {
       console.log('bluff Rates #2')
-      console.log(data)
-      const { rate } = data.data
-      this.percentage = `${rate}%`
+      const { rate, selectedItem } = data.data
+      const { itemId } = selectedItem
+      const index = this.itemList.findIndex((item: any) => item.id === itemId)
+      const item: any = this.itemList[index]
+      item.percentage = `${rate}%`
     })
   }
 }

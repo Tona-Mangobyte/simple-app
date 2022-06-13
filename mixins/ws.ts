@@ -53,7 +53,7 @@ export default class extends Vue {
 
   connectSocket() {
     try {
-      this.socket = io('http://localhost:9000', {
+      this.socket = io('http://34.85.34.129:238', {
         path: '/minority.game/',
         transports: ['polling'],
         auth: {
