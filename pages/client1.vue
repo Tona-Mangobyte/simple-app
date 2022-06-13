@@ -13,7 +13,7 @@
               >
             </v-list-item-content>
           </v-list-item>
-          <v-form ref="form" lazy-validation>
+          <!--<v-form ref="form" lazy-validation>
             <v-text-field v-model="eventId" label="Event Id"></v-text-field>
             <v-text-field
               v-model.number="userId"
@@ -23,7 +23,7 @@
               v-model.number="duration"
               label="Duration"
             ></v-text-field>
-          </v-form>
+          </v-form>-->
           <v-radio-group v-model="itemId">
             <v-radio
               v-for="n in itemList"
@@ -36,15 +36,16 @@
         <v-card-actions>
           <v-btn color="primary" @click="joinFree"> Join Free </v-btn>
           <v-btn color="primary" @click="bluffRates"> IS Bluff </v-btn>
+          <v-btn color="primary" @click="onSelect"> Select </v-btn>
           <!--<v-btn color="primary" @click="start"> March Start </v-btn>-->
-          <v-btn color="primary" @click="cancel"> March Cancel </v-btn>
-          <v-btn color="primary" @click="join"> March Join </v-btn>
+          <!--<v-btn color="primary" @click="cancel"> March Cancel </v-btn>-->
+          <!--<v-btn color="primary" @click="join"> March Join </v-btn>
           <v-btn color="primary" @click="joinCancel"> March Join Cancel </v-btn>
           <v-btn color="primary" @click="getDuration"> Duration </v-btn>
           <v-btn color="primary" @click="addUserToRoom">
             Add User(Join Already)
           </v-btn>
-          <v-btn color="primary" @click="leaveUserFromRoom"> Leave User </v-btn>
+          <v-btn color="primary" @click="leaveUserFromRoom"> Leave User </v-btn>-->
         </v-card-actions>
       </v-card>
     </v-col>

@@ -28,6 +28,7 @@ export default class extends Vue {
   BLUFF_RATES = '6'
   LISTEN_DURATION_MATCH_ROOM = '15'
   STARTED_QUICK_IN_MATCH_ROOM = '16'
+  RESULT_MATCH_ROUND = '17'
 
   // SOCKET LISTEN ERROR
   CONNECTION_ERROR = 'connect_error'
@@ -130,6 +131,10 @@ export default class extends Vue {
       console.log(resp)
       this.quick = resp.data.quick
     })
+    this.socket.on(this.RESULT_MATCH_ROUND, (result: any) => {
+      console.log('Result match in round')
+      console.log(result)
+    })
     this.socket.on(this.DISCONNECT, () => {
       console.log('The client is disconnect')
     })
@@ -173,8 +178,13 @@ export default class extends Vue {
   joinFree() {
     console.log('Game Free join...')
     const data = `{ "eventId": 1}`
-    const result = this.socket.emit(this.GAME_FREE_JOIN, data)
-    console.info(result)
+    this.socket.emit(this.GAME_FREE_JOIN, data, (result: any) => {
+      console.log('Game Free joined')
+      console.info(result)
+    })
+    console.log('start duration match...')
+    const dataDuration = `{ "eventId": "${this.eventId}", "duration": 30, "round": ${this.round} }`
+    this.socket.emit(this.DURATION_MATCH_ROOM, dataDuration)
   }
 
   joinCancel() {
@@ -187,8 +197,22 @@ export default class extends Vue {
     console.log('bluff Rates...')
     const isBluff = true
     const data = `{ "eventId": ${this.eventId}, "itemId": ${this.itemId}, "userId": ${this.userId}, "round": ${this.round}, "isBluff": ${isBluff} }`
-    const result = this.socket.emit(this.BLUFF_RATE, data)
-    console.info(result)
+    this.socket.emit(this.BLUFF_RATE, data, (result: any) => {
+      console.log('is bluff success')
+      console.info(result)
+      const { rate, selectedItem } = result.data
+      const { itemId } = selectedItem
+      this.$store.dispatch('item/updatePercentage', { itemId, rate })
+    })
+  }
+
+  onSelect() {
+    console.log('select item...')
+    const data = `{ "eventId": ${this.eventId}, "itemId": ${this.itemId}, "userId": ${this.userId}, "round": ${this.round}, "isBluff": false }`
+    this.socket.emit(this.BLUFF_RATE, data, (result: any) => {
+      console.log('select item success')
+      console.info(result)
+    })
   }
 
   getDuration() {
