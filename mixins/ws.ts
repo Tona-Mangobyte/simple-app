@@ -43,6 +43,10 @@ export default class extends Vue {
     throw new Error('access token api is required')
   }
 
+  get itemList() {
+    return this.$store.getters['item/allItems']
+  }
+
   // duration time counter
   duration = 30
   counter = 0
@@ -53,7 +57,7 @@ export default class extends Vue {
 
   connectSocket() {
     try {
-      this.socket = io('http://34.85.34.129:238', {
+      this.socket = io('http://localhost:9000', {
         path: '/minority.game/',
         transports: ['polling'],
         auth: {
@@ -111,8 +115,12 @@ export default class extends Vue {
     this.socket.on(this.BLUFF_RATES, (data: any) => {
       console.log('bluff Rates')
       console.log(data)
-      const { rate } = data.data
-      this.percentage = `${rate}%`
+      const { rate, selectedItem } = data.data
+      const { itemId } = selectedItem
+      /* const index = this.itemList.findIndex((item: any) => item.id === itemId)
+      const item: any = this.itemList[index]
+      item.percentage = `${rate}%` */
+      this.$store.dispatch('item/updatePercentage', { itemId, rate })
     })
     this.socket.on(this.LISTEN_DURATION_MATCH_ROOM, (resp: any) => {
       this.counter = resp.data.duration
@@ -165,7 +173,8 @@ export default class extends Vue {
   joinFree() {
     console.log('Game Free join...')
     const data = `{ "eventId": 1}`
-    this.socket.emit(this.GAME_FREE_JOIN, data)
+    const result = this.socket.emit(this.GAME_FREE_JOIN, data)
+    console.info(result)
   }
 
   joinCancel() {

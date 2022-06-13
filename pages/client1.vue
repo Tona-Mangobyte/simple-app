@@ -79,7 +79,6 @@ export default class extends mixins(ws) {
   IS_USERID = true
   userId = 5
   eventId = '1'
-  itemList = []
 
   get accessToken() {
     // return this.$config.tokenClient1
@@ -89,25 +88,9 @@ export default class extends mixins(ws) {
   async mounted() {
     this.connectSocket()
     this.getAllListenEventOnSocket()
-    const apiKey = this.$config.apiKey
-    const { data } = await this.$axios.get('freeSelectItemList', {
-      headers: { 'x-api-key': apiKey, accept: 'application/json;api.v=1' },
-    })
-    const { round, items } = data.data
-    this.itemList = items.map((item: any) => {
-      item.percentage = '0%'
-      return item
-    })
+    const { round, items } = await this.$store.dispatch('item/getItemList')
     this.round = round
-    console.info(this.itemList)
-    this.socket.on(this.BLUFF_RATES, (data: any) => {
-      console.log('bluff Rates #2')
-      const { rate, selectedItem } = data.data
-      const { itemId } = selectedItem
-      const index = this.itemList.findIndex((item: any) => item.id === itemId)
-      const item: any = this.itemList[index]
-      item.percentage = `${rate}%`
-    })
+    console.info(items)
   }
 }
 </script>
