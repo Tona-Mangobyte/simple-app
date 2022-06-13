@@ -183,7 +183,7 @@ export default class extends Vue {
       console.info(result)
     })
     console.log('start duration match...')
-    const dataDuration = `{ "eventId": "${this.eventId}", "duration": 30, "round": ${this.round} }`
+    const dataDuration = `{ "eventId": "${this.eventId}", "duration": 60, "round": ${this.round} }`
     this.socket.emit(this.DURATION_MATCH_ROOM, dataDuration)
   }
 
