@@ -59,12 +59,12 @@ import ws from '~/mixins/ws'
 export default class extends mixins(ws) {
   // Mango one
   IS_USERID = true
-  userId = 1
+  userId = 2
   eventId = '1'
 
   get accessToken() {
     // return this.$config.tokenClient2
-    return '1'
+    return '2'
   }
 
   async mounted() {

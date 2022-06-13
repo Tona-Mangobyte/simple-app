@@ -78,12 +78,12 @@ import ws from '~/mixins/ws'
 export default class extends mixins(ws) {
   // Tona MB
   IS_USERID = true
-  userId = 5
+  userId = 1
   eventId = '1'
 
   get accessToken() {
     // return this.$config.tokenClient1
-    return '5'
+    return '1'
   }
 
   async mounted() {
