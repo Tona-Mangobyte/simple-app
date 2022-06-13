@@ -23,10 +23,14 @@ export default class Users extends Vue {
     // /news?page=1&limit=3&sort=publishedAt&direction=DESC
     // /news?page=1&limit=10&postedAt=2022-02-09T03:34:58.000Z
     this.$axios
-      .get('/v1/event/639dd3bf-cc84-473a-b844-b02b81fd2d47', {
+      .get('news?page=1&limit=3&sort=publishedAt&direction=DESC', {
         headers: {
           'x-api-key': apiKey,
         },
+        // withCredentials: true,
+        // mode: 'no-cors',
+        // credentials: 'same-origin',
+        // crossdomain: true,
       })
       .then(function (response) {
         // handle success

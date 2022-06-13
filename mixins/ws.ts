@@ -3,6 +3,7 @@ import { io, Socket } from 'socket.io-client'
 
 @Component
 export default class extends Vue {
+  IS_USERID = false
   // SOCKET REQUEST EVENT
   MATCH_START = '1'
   MATCH_CANCEL = '2'
@@ -13,6 +14,7 @@ export default class extends Vue {
   LEAVE_MATCH_ROOM = '7'
   DURATION_MATCH_ROOM = '8'
   QUICK_MATCH_ROOM = '9'
+  GAME_FREE_JOIN = '10'
 
   // SOCKET LISTEN EVENT
   CONNECTION = 'connect'
@@ -34,8 +36,10 @@ export default class extends Vue {
   socket!: Socket
   isConnect = false
 
+  percentage = '0%'
+
   // Token Access API
-  get accessToken() {
+  get accessToken(): string {
     throw new Error('access token api is required')
   }
 
@@ -48,13 +52,20 @@ export default class extends Vue {
   users = []
 
   connectSocket() {
-    this.socket = io('http://localhost:9000', {
-      path: '/minority.game/',
-      transports: ['polling'],
-      auth: {
-        token: `Bearer ${this.accessToken}`,
-      },
-    })
+    try {
+      this.socket = io('http://localhost:9000', {
+        path: '/minority.game/',
+        transports: ['polling'],
+        auth: {
+          token: this.IS_USERID
+            ? this.accessToken
+            : `Bearer ${this.accessToken}`,
+        },
+      })
+    } catch (e) {
+      console.info('======================')
+      console.error(e)
+    }
   }
 
   get getConnectionState() {
@@ -62,11 +73,13 @@ export default class extends Vue {
   }
 
   getAllListenEventOnSocket() {
-    this.socket.on(this.CONNECTION, () => {
+    this.socket.on(this.CONNECTION, (socket) => {
       if (this.socket.connected) {
         console.log('The client is connected')
         this.isConnect = true
       }
+      console.info(this.socket)
+      console.info(socket)
     })
     this.socket.on(this.USER_CONNECTED, (data: any) => {
       console.log('listen user connection')
@@ -98,6 +111,8 @@ export default class extends Vue {
     this.socket.on(this.BLUFF_RATES, (data: any) => {
       console.log('bluff Rates')
       console.log(data)
+      const { rate } = data.data
+      this.percentage = `${rate}%`
     })
     this.socket.on(this.LISTEN_DURATION_MATCH_ROOM, (resp: any) => {
       this.counter = resp.data.duration
@@ -111,9 +126,11 @@ export default class extends Vue {
       console.log('The client is disconnect')
     })
     this.socket.on(this.CONNECTION_ERROR, (err) => {
+      console.info('CONNECTION_ERROR')
       console.log(err)
     })
     this.socket.on(this.GENERAL_ERROR, (err) => {
+      console.info('GENERAL_ERROR')
       console.log(err)
     })
   }
@@ -124,6 +141,8 @@ export default class extends Vue {
   eventId = ''
   userId = 0
   matchId = 0
+  itemId = 0
+  round = 0
 
   start() {
     console.log('matches starting...')
@@ -143,6 +162,12 @@ export default class extends Vue {
     this.socket.emit(this.MATCH_JOIN, data)
   }
 
+  joinFree() {
+    console.log('Game Free join...')
+    const data = `{ "eventId": 1}`
+    this.socket.emit(this.GAME_FREE_JOIN, data)
+  }
+
   joinCancel() {
     console.log('matches join cancel...')
     const data = `{ "eventId": "${this.eventId}", "matchId": "${this.matchId}", "userId": ${this.userId} }`
@@ -151,12 +176,8 @@ export default class extends Vue {
 
   bluffRates() {
     console.log('bluff Rates...')
-    const eventId = 17
-    this.userId = 1
-    const itemId = 94
-    const round = 1
     const isBluff = true
-    const data = `{ "eventId": ${eventId}, "itemId": ${itemId}, "userId": ${this.userId}, "round": ${round}, "isBluff": ${isBluff} }`
+    const data = `{ "eventId": ${this.eventId}, "itemId": ${this.itemId}, "userId": ${this.userId}, "round": ${this.round}, "isBluff": ${isBluff} }`
     const result = this.socket.emit(this.BLUFF_RATE, data)
     console.info(result)
   }

@@ -9,16 +9,18 @@ export default {
     tokenClient: process.env.ACCESS_TOKEN_CLIENT,
     tokenClient1: process.env.ACCESS_TOKEN_CLIENT1,
     tokenClient2: process.env.ACCESS_TOKEN_CLIENT2,
+    PROXY_API_URL: process.env.PROXY_API_URL,
     axios: {
       baseURL: process.env.API_URL,
+      proxy: true,
     },
     apiKey: process.env.API_KEY,
   },
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
-  ssr: false,
+  // ssr: false,
 
   // Target: https://go.nuxtjs.dev/config-target
-  target: 'static',
+  // target: 'static',
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -55,6 +57,7 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    '@nuxtjs/proxy',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -85,7 +88,16 @@ export default {
       },
     },
   },
-
+  proxy: {
+    /* '/api.v1/': {
+      target: process.env.PROXY_API_URL,
+      pathRewrite: { '^/api.v1/': '/api/' },
+    }, */
+    '/api/': {
+      target: process.env.PROXY_API_URL,
+      pathRewrite: { '^/api/': '/api/' },
+    },
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 }

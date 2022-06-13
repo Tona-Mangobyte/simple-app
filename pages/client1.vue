@@ -24,13 +24,22 @@
               label="Duration"
             ></v-text-field>
           </v-form>
+          <v-radio-group v-model="itemId">
+            <v-radio
+              v-for="n in itemList.items"
+              :key="n.id"
+              :label="`${n.title}(${percentage})`"
+              :value="n.id"
+            ></v-radio>
+          </v-radio-group>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" @click="start"> March Start </v-btn>
+          <v-btn color="primary" @click="joinFree"> Join Free </v-btn>
+          <v-btn color="primary" @click="bluffRates"> IS Bluff </v-btn>
+          <!--<v-btn color="primary" @click="start"> March Start </v-btn>-->
           <v-btn color="primary" @click="cancel"> March Cancel </v-btn>
           <v-btn color="primary" @click="join"> March Join </v-btn>
           <v-btn color="primary" @click="joinCancel"> March Join Cancel </v-btn>
-          <v-btn color="primary" @click="bluffRates"> Bluff Rates </v-btn>
           <v-btn color="primary" @click="getDuration"> Duration </v-btn>
           <v-btn color="primary" @click="addUserToRoom">
             Add User(Join Already)
@@ -67,15 +76,35 @@ import ws from '~/mixins/ws'
 @Component
 export default class extends mixins(ws) {
   // Tona MB
-  userId = 1
-
-  get accessToken() {
-    return this.$config.tokenClient1
+  IS_USERID = true
+  userId = 5
+  eventId = '1'
+  itemList = {
+    items: [],
   }
 
-  mounted() {
+  get accessToken() {
+    // return this.$config.tokenClient1
+    return '5'
+  }
+
+  async mounted() {
     this.connectSocket()
     this.getAllListenEventOnSocket()
+    const apiKey = this.$config.apiKey
+    const { data } = await this.$axios.get('freeSelectItemList', {
+      headers: { 'x-api-key': apiKey, accept: 'application/json;api.v=1' },
+    })
+    this.itemList = data.data
+    const { round } = data.data
+    this.round = round
+    console.info(this.itemList)
+    this.socket.on(this.BLUFF_RATES, (data: any) => {
+      console.log('bluff Rates #2')
+      console.log(data)
+      const { rate } = data.data
+      this.percentage = `${rate}%`
+    })
   }
 }
 </script>

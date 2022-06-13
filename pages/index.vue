@@ -24,13 +24,22 @@
               label="Duration"
             ></v-text-field>
           </v-form>
+          <v-radio-group v-model="itemId">
+            <v-radio
+              v-for="n in itemList.items"
+              :key="n.id"
+              :label="`${n.title}(${percentage})`"
+              :value="n.id"
+            ></v-radio>
+          </v-radio-group>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" @click="start"> March Start </v-btn>
+          <v-btn color="primary" @click="joinFree"> Join Free </v-btn>
+          <v-btn color="primary" @click="bluffRates"> IS Bluff </v-btn>
+          <!--<v-btn color="primary" @click="start"> March Start </v-btn>-->
           <v-btn color="primary" @click="cancel"> March Cancel </v-btn>
           <v-btn color="primary" @click="join"> March Join </v-btn>
           <v-btn color="primary" @click="joinCancel"> March Join Cancel </v-btn>
-          <v-btn color="primary" @click="bluffRates"> Bluff Rates </v-btn>
           <v-btn color="primary" @click="getDuration"> Duration </v-btn>
           <v-btn color="primary" @click="addUserToRoom">
             Add User(Join Already)
@@ -38,25 +47,6 @@
           <v-btn color="primary" @click="leaveUserFromRoom"> Leave User </v-btn>
         </v-card-actions>
       </v-card>
-    </v-col>
-    <v-col>
-      <v-row>
-        <v-col v-for="(q, index) in quick.items" :key="index">
-          <v-card class="mx-auto" max-width="344">
-            <v-img
-              v-if="quick.type === 'IMAGE'"
-              :src="
-                q.imageUrl ||
-                'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg'
-              "
-              height="200px"
-            ></v-img>
-            <v-card-title>
-              <p class="text-h4 text--primary">{{ q.title }}</p>
-            </v-card-title>
-          </v-card>
-        </v-col>
-      </v-row>
     </v-col>
   </v-row>
 </template>
@@ -68,15 +58,36 @@ import ws from '~/mixins/ws'
 @Component
 export default class extends mixins(ws) {
   // Mango one Admin
+  IS_USERID = true
   userId = 2
-
-  get accessToken() {
-    return this.$config.tokenClient
+  eventId = '1'
+  itemList = {
+    items: [],
   }
 
-  mounted() {
+  get accessToken() {
+    // return this.$config.tokenClient
+    return '2'
+  }
+
+  async mounted() {
     this.connectSocket()
     this.getAllListenEventOnSocket()
+    const apiKey = this.$config.apiKey
+    const { data } = await this.$axios.get('freeSelectItemList', {
+      headers: { 'x-api-key': apiKey, accept: 'application/json;api.v=1' },
+    })
+    const { round } = data.data
+    this.round = round
+    this.itemList = data.data
+    console.info(this.itemList)
+    console.info(this.round)
+    this.socket.on(this.BLUFF_RATES, (data: any) => {
+      console.log('bluff Rates #2')
+      console.log(data)
+      const { rate } = data.data
+      this.percentage = `${rate}%`
+    })
   }
 }
 </script>
