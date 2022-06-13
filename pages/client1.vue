@@ -3,7 +3,7 @@
     <v-col cols="12">
       <v-card>
         <v-card-title class="headline">
-          Welcome to Minority Game | Counter {{ counter }}
+          Demo Minority Game Free | Counter {{ counter }}
         </v-card-title>
         <v-card-text>
           <v-list-item>
