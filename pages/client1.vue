@@ -3,7 +3,8 @@
     <v-col cols="12">
       <v-card>
         <v-card-title class="headline">
-          Demo Minority Game Free | Counter {{ counter }}
+          Demo Minority Game Free | Counter {{ counter }} | Total Player
+          {{ totalPlayer }}
         </v-card-title>
         <v-card-text>
           <v-list-item>
@@ -35,6 +36,7 @@
         </v-card-text>
         <v-card-actions>
           <v-btn color="primary" @click="joinFree"> Join Free </v-btn>
+          <v-btn color="primary" @click="leaveFree"> leave Join Free </v-btn>
           <v-btn color="primary" @click="bluffRates"> IS Bluff </v-btn>
           <v-btn color="primary" @click="onSelect"> Select </v-btn>
           <!--<v-btn color="primary" @click="start"> March Start </v-btn>-->
@@ -92,6 +94,13 @@ export default class extends mixins(ws) {
     const { round, items } = await this.$store.dispatch('item/getItemList')
     this.round = round
     console.info(items)
+  }
+
+  leaveFree() {
+    console.log('Game Free leave join...')
+    const data = `{ "eventId": 1}`
+    this.socket.emit(this.LEAVE_MATCH_ROOM, data)
+    this.totalPlayer = 0
   }
 }
 </script>

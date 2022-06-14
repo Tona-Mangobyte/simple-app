@@ -51,6 +51,7 @@ export default class extends Vue {
   // duration time counter
   duration = 45
   counter = 0
+  totalPlayer = 0
   quick = { type: 'TEXT', items: [] }
 
   // users in waiting room
@@ -104,6 +105,7 @@ export default class extends Vue {
       console.log('waiting users list')
       console.log(resp)
       this.users = resp.data
+      this.totalPlayer = this.users.length
     })
     this.socket.on(this.MATCH_JOINED, (resp: any) => {
       console.log('matches joined')
@@ -190,6 +192,12 @@ export default class extends Vue {
     console.log('start duration match...')
     const dataDuration = `{ "eventId": "${this.eventId}", "duration": ${this.duration}, "round": ${this.round} }`
     this.socket.emit(this.DURATION_MATCH_ROOM, dataDuration)
+  }
+
+  leaveFree() {
+    console.log('Game Free leave join...')
+    const data = `{ "eventId": 1}`
+    this.socket.emit(this.LEAVE_MATCH_ROOM, data)
   }
 
   joinCancel() {
