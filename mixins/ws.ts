@@ -122,14 +122,11 @@ export default class extends Vue {
       console.log('matches cancelled')
       console.log(data)
     })
-    this.socket.on(this.BLUFF_RATES, (data: any) => {
+    this.socket.on(this.BLUFF_RATES, (resp: any) => {
       console.log('bluff Rates')
-      console.log(data)
-      const { rate, selectedItem } = data.data
+      console.log(resp)
+      const { rate, selectedItem } = resp.data
       const { itemId } = selectedItem
-      /* const index = this.itemList.findIndex((item: any) => item.id === itemId)
-      const item: any = this.itemList[index]
-      item.percentage = `${rate}%` */
       this.$store.dispatch('item/updatePercentage', { itemId, rate })
     })
     this.socket.on(this.LISTEN_DURATION_MATCH_ROOM, (resp: any) => {
