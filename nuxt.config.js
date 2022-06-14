@@ -12,6 +12,7 @@ export default {
     tokenClient1: process.env.ACCESS_TOKEN_CLIENT1,
     tokenClient2: process.env.ACCESS_TOKEN_CLIENT2,
     PROXY_API_URL: process.env.PROXY_API_URL,
+    API_URL: process.env.API_URL,
     axios: {
       baseURL: process.env.API_URL,
       proxy: true,

@@ -71,26 +71,6 @@ export default class extends mixins(ws) {
   async mounted() {
     this.connectSocket()
     this.getAllListenEventOnSocket()
-    /* const apiKey = this.$config.apiKey
-    const { data } = await this.$axios.get('freeSelectItemList', {
-      headers: { 'x-api-key': apiKey, accept: 'application/json;api.v=1' },
-    })
-    const { round, items } = data.data
-    this.round = round
-    this.itemList = items.map((item: any) => {
-      item.percentage = '0%'
-      return item
-    })
-    console.info(this.itemList)
-    console.info(this.round) */
-    /* this.socket.on(this.BLUFF_RATES, (data: any) => {
-      console.log('bluff Rates #2')
-      const { rate, selectedItem } = data.data
-      const { itemId } = selectedItem
-      const index = this.itemList.findIndex((item: any) => item.id === itemId)
-      const item: any = this.itemList[index]
-      item.percentage = `${rate}%`
-    }) */
     const { round, items } = await this.$store.dispatch('item/getItemList')
     this.round = round
     console.info(items)

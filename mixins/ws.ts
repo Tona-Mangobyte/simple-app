@@ -49,16 +49,25 @@ export default class extends Vue {
   }
 
   // duration time counter
-  duration = 30
+  duration = 45
   counter = 0
   quick = { type: 'TEXT', items: [] }
 
   // users in waiting room
   users = []
 
+  async mounted() {
+    this.connectSocket()
+    this.getAllListenEventOnSocket()
+    const { round, items } = await this.$store.dispatch('item/getItemList')
+    this.round = round
+    console.info(items)
+  }
+
   connectSocket() {
     try {
-      this.socket = io('http://34.85.34.129:238', {
+      const api = this.$config.API_URL
+      this.socket = io(api, {
         path: '/minority.game/',
         transports: ['polling'],
         auth: {
@@ -178,12 +187,9 @@ export default class extends Vue {
   joinFree() {
     console.log('Game Free join...')
     const data = `{ "eventId": 1}`
-    this.socket.emit(this.GAME_FREE_JOIN, data, (result: any) => {
-      console.log('Game Free joined')
-      console.info(result)
-    })
+    this.socket.emit(this.GAME_FREE_JOIN, data)
     console.log('start duration match...')
-    const dataDuration = `{ "eventId": "${this.eventId}", "duration": 60, "round": ${this.round} }`
+    const dataDuration = `{ "eventId": "${this.eventId}", "duration": ${this.duration}, "round": ${this.round} }`
     this.socket.emit(this.DURATION_MATCH_ROOM, dataDuration)
   }
 
@@ -197,22 +203,20 @@ export default class extends Vue {
     console.log('bluff Rates...')
     const isBluff = true
     const data = `{ "eventId": ${this.eventId}, "itemId": ${this.itemId}, "userId": ${this.userId}, "round": ${this.round}, "isBluff": ${isBluff} }`
-    this.socket.emit(this.BLUFF_RATE, data, (result: any) => {
+    /* this.socket.emit(this.BLUFF_RATE, data, (result: any) => {
       console.log('is bluff success')
       console.info(result)
       const { rate, selectedItem } = result.data
       const { itemId } = selectedItem
       this.$store.dispatch('item/updatePercentage', { itemId, rate })
-    })
+    }) */
+    this.socket.emit(this.BLUFF_RATE, data)
   }
 
   onSelect() {
     console.log('select item...')
     const data = `{ "eventId": ${this.eventId}, "itemId": ${this.itemId}, "userId": ${this.userId}, "round": ${this.round}, "isBluff": false }`
-    this.socket.emit(this.BLUFF_RATE, data, (result: any) => {
-      console.log('select item success')
-      console.info(result)
-    })
+    this.socket.emit(this.BLUFF_RATE, data)
   }
 
   getDuration() {
