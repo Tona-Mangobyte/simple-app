@@ -26,7 +26,7 @@ export default class extends Vue {
   MATCH_JOIN_CANCELLED = '3'
   MATCH_CANCELLED = '5'
   BLUFF_RATES = '6'
-  LISTEN_DURATION_MATCH_ROOM = '15'
+  DURATION_ROOM = '15'
   STARTED_QUICK_IN_MATCH_ROOM = '16'
   RESULT_MATCH_ROUND = '17'
 
@@ -129,7 +129,9 @@ export default class extends Vue {
       const { itemId } = selectedItem
       this.$store.dispatch('item/updatePercentage', { itemId, rate })
     })
-    this.socket.on(this.LISTEN_DURATION_MATCH_ROOM, (resp: any) => {
+    this.socket.on(this.DURATION_ROOM, (resp: any) => {
+      console.log('duration counting...')
+      console.log(resp)
       this.counter = resp.data.duration
     })
     this.socket.on(this.STARTED_QUICK_IN_MATCH_ROOM, (resp: any) => {
