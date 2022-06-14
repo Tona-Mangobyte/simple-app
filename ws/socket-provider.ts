@@ -43,18 +43,13 @@ export class SocketProvider {
   }
 
   connectSocket(accessToken: string) {
-    try {
-      this.socket = io(this.apiUrl, {
-        path: '/minority.game/',
-        transports: ['polling'],
-        auth: {
-          token: accessToken,
-        },
-      })
-    } catch (e) {
-      console.info('======================')
-      console.error(e)
-    }
+    this.socket = io(this.apiUrl, {
+      path: '/minority.game/',
+      transports: ['polling'],
+      auth: {
+        token: accessToken,
+      },
+    })
   }
 
   getAllListenEventOnSocket() {
