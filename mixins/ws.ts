@@ -20,6 +20,7 @@ export default class extends Vue {
   CONNECTION = 'connect'
   DISCONNECT = 'disconnect'
   USER_CONNECTED = '0'
+  USER_DISCONNECTED = '1'
   WAITING_USERS_LIST = '13'
   MATCH_STARTED = '4'
   MATCH_JOINED = '2'
@@ -144,6 +145,10 @@ export default class extends Vue {
     this.socket.on(this.RESULT_MATCH_ROUND, (result: any) => {
       console.log('Result match in round')
       console.log(result)
+    })
+    this.socket.on(this.USER_DISCONNECTED, (data) => {
+      console.log('client disconnect')
+      console.log(data)
     })
     this.socket.on(this.DISCONNECT, () => {
       console.log('The client is disconnect')
