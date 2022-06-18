@@ -10,6 +10,25 @@ const getItemList = async ({ commit, _dispatch }) => {
   return { round, items }
 }
 
+const getItemListMatch = async ({ commit, _dispatch }, payload) => {
+  try {
+    const { matchId, token } = payload
+    const apiKey = window.$nuxt.$config.apiKey
+    const { data } = await window.$nuxt.$axios.get(`selectItems/${matchId}`, {
+      headers: {
+        'x-api-key': apiKey,
+        accept: 'application/json;api.v=1',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    const { round, items } = data.data
+    commit(ITEM_LIST, { round, items })
+    return { round, items }
+  } catch (e) {
+    console.error(e)
+  }
+}
+
 const updatePercentage = ({ commit, _dispatch }, payload) => {
   commit(PERCENTAGE, payload)
 }
@@ -17,4 +36,5 @@ const updatePercentage = ({ commit, _dispatch }, payload) => {
 export default {
   getItemList,
   updatePercentage,
+  getItemListMatch,
 }

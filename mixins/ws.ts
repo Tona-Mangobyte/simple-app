@@ -171,6 +171,7 @@ export default class extends Vue {
   matchId = 0
   itemId = 0
   round = 0
+  token = ''
 
   start() {
     console.log('matches starting...')
@@ -188,6 +189,9 @@ export default class extends Vue {
     console.log('matches join...')
     const data = `{ "eventId": "${this.eventId}", "userId": ${this.userId} }`
     this.socket.emit(this.MATCH_JOIN, data)
+    console.log('start duration match...')
+    const dataDuration = `{ "eventId": "${this.eventId}", "duration": ${this.duration}, "round": ${this.round} }`
+    this.socket.emit(this.DURATION_MATCH_ROOM, dataDuration)
   }
 
   joinFree() {
@@ -207,14 +211,14 @@ export default class extends Vue {
 
   joinCancel() {
     console.log('matches join cancel...')
-    const data = `{ "eventId": "${this.eventId}", "matchId": "${this.matchId}", "userId": ${this.userId} }`
+    const data = `{ "eventId": "${this.eventId}", "userId": ${this.userId} }`
     this.socket.emit(this.MATCH_JOIN_CANCEL, data)
   }
 
   bluffRates() {
     console.log('bluff Rates...')
     const isBluff = true
-    const data = `{ "eventId": ${this.eventId}, "itemId": ${this.itemId}, "userId": ${this.userId}, "round": ${this.round}, "isBluff": ${isBluff} }`
+    const data = `{ "eventId": "${this.eventId}", "itemId": ${this.itemId}, "userId": ${this.userId}, "round": ${this.round}, "isBluff": ${isBluff} }`
     /* this.socket.emit(this.BLUFF_RATE, data, (result: any) => {
       console.log('is bluff success')
       console.info(result)
@@ -227,7 +231,7 @@ export default class extends Vue {
 
   onSelect() {
     console.log('select item...')
-    const data = `{ "eventId": ${this.eventId}, "itemId": ${this.itemId}, "userId": ${this.userId}, "round": ${this.round}, "isBluff": false }`
+    const data = `{ "eventId": "${this.eventId}", "itemId": ${this.itemId}, "userId": ${this.userId}, "round": ${this.round}, "isBluff": false }`
     this.socket.emit(this.BLUFF_RATE, data)
   }
 
@@ -245,5 +249,17 @@ export default class extends Vue {
   leaveUserFromRoom() {
     const data = `{ "eventId": "${this.eventId}" }`
     this.socket.emit(this.LEAVE_MATCH_ROOM, data)
+  }
+
+  async getItemsListMatch() {
+    const { round, items } = await this.$store.dispatch(
+      'item/getItemListMatch',
+      {
+        matchId: this.matchId,
+        token: this.token,
+      }
+    )
+    this.round = round
+    console.info(items)
   }
 }
