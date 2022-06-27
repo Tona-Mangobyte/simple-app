@@ -9,27 +9,27 @@ export default class extends Vue {
   MATCH_CANCEL = '2'
   MATCH_JOIN = '4'
   MATCH_JOIN_CANCEL = '3'
-  BLUFF_RATE = '5'
+  BLUFF_RATE = 'v1.match_on_bluff_rates_changed'
   JOIN_MATCH_ROOM = '6'
   LEAVE_MATCH_ROOM = '7'
-  DURATION_MATCH_ROOM = '8'
+  DURATION_MATCH_ROOM = 'v1.match_duration'
   QUICK_MATCH_ROOM = '9'
-  GAME_FREE_JOIN = '10'
+  GAME_FREE_JOIN = 'v1.match_join_free'
 
   // SOCKET LISTEN EVENT
   CONNECTION = 'connect'
   DISCONNECT = 'disconnect'
   USER_CONNECTED = '0'
   USER_DISCONNECTED = '1'
-  WAITING_USERS_LIST = '13'
+  WAITING_USERS_LIST = 'v1.match_on_waiting_users_changed'
   MATCH_STARTED = '4'
   MATCH_JOINED = '2'
   MATCH_JOIN_CANCELLED = '3'
   MATCH_CANCELLED = '5'
   BLUFF_RATES = '6'
-  DURATION_ROOM = '15'
+  DURATION_ROOM = 'v1.match_on_duration_changed'
   STARTED_QUICK_IN_MATCH_ROOM = '16'
-  RESULT_MATCH_ROUND = '17'
+  RESULT_MATCH_ROUND = 'v1.match_on_result_in_round'
 
   // SOCKET LISTEN ERROR
   CONNECTION_ERROR = 'connect_error'
@@ -50,7 +50,7 @@ export default class extends Vue {
   }
 
   // duration time counter
-  duration = 45
+  duration = 15
   counter = 0
   totalPlayer = 0
   quick = { type: 'TEXT', items: [] }

@@ -12,7 +12,9 @@ export default {
   [PERCENTAGE](state, payload = {}) {
     const { itemId, rate } = payload
     const index = state.all.findIndex((item) => item.id === itemId)
-    const item = state.all[index]
-    item.percentage = `${rate}%`
+    if (index > -1) {
+      const item = state.all[index]
+      item.percentage = `${rate}%`
+    }
   },
 }
