@@ -50,7 +50,7 @@ export default class extends Vue {
   }
 
   // duration time counter
-  duration = 15
+  duration = 50
   counter = 0
   totalPlayer = 0
   quick = { type: 'TEXT', items: [] }
